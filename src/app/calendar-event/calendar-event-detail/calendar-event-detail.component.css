@@ -1,0 +1,17 @@
+.content-event-detail{
+  display: flex;
+  justify-content: space-around;
+}
+
+.name-property{
+  font-size: medium;
+  color: #363636;
+}
+
+table{
+width: 30%;
+}
+
+td{
+  padding-bottom: 5%;
+}

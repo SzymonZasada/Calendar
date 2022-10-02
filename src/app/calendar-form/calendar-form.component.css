@@ -1,0 +1,32 @@
+.calendar-form {
+  padding: 2rem 10rem 10rem 5rem;
+}
+
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.clean-form{
+}
+
+.new-event{
+  float: right;
+}
+
+.title-container {
+  text-align: center;
+  padding-bottom: 3rem;
+}

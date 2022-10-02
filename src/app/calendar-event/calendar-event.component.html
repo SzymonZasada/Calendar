@@ -1,0 +1,41 @@
+<div>
+  <div class='title-container'>
+    <div class='title center'>
+      Calendar
+    </div>
+    <div class='subtitle'>
+      Check your upcoming events
+    </div>
+  </div>
+
+  <div class='date panel-size'>Today date: {{currentDate$ | async}}</div>
+  <div class='date panel-size'> {{currentTime$ | async}}</div>
+
+  <ng-container *ngFor='let event of events'>
+    <div class='panel-size'>
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <mat-icon color='primary'>{{event.icon}}</mat-icon>
+            </mat-panel-title>
+            <mat-panel-description>
+              <span class='title-width'>{{event.title}}</span>&nbsp;
+              <span *ngIf="event.event==='today' ">Today</span>
+              <span *ngIf="event.event==='incoming' ">Incoming</span>
+              <span *ngIf="event.event==='ended' ">Ended</span>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class='calendar-detail'>
+            <app-calendar-event-detail [eventDetail]='event'></app-calendar-event-detail>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </ng-container>
+
+  <div class='event-button'>
+    <button mat-raised-button color='primary' (click)='addEvent()'>Add event</button>
+  </div>
+
+</div>

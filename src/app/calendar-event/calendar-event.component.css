@@ -1,0 +1,39 @@
+.panel-size {
+  margin: 1% 1% 1% 1%;
+}
+
+.title-width {
+  width: 12%
+}
+
+.title-container {
+  text-align: center;
+}
+
+.center {
+  padding-top: 2%;
+  padding-bottom: 1%;
+}
+
+.date {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.event-button {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 3%;
+  padding-top: 5%;
+}
+
+.calendar-detail {
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+.mat-expansion-panel {
+  background-color: #eeeeee;
+}
+
+

@@ -1,0 +1,117 @@
+<div class='calendar-form'>
+
+  <div class='title-container'>
+    <div class='title center'>
+      Event
+    </div>
+    <div class='subtitle'>
+      Add new event
+    </div>
+  </div>
+
+  <div class='input-form'>
+
+    <form [formGroup]='calendarForm'>
+      <mat-form-field class='full-width' appearance='fill'>
+        <mat-label>Title</mat-label>
+        <input type='text' matInput formControlName='title' placeholder='Title'>
+        <mat-error *ngIf="calendarForm.controls.title.hasError('required')">
+          Title is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class='full-width' appearance='fill'>
+        <mat-label>Event date</mat-label>
+        <input matInput [matDatepicker]='picker1' formControlName='date'>
+        <mat-datepicker-toggle matSuffix [for]='picker1'></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <mat-error *ngIf="calendarForm.controls.date.hasError('required')">
+          Date is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class='full-width' appearance='fill'>
+        <mat-label>Email</mat-label>
+        <input type='email' matInput formControlName='email' placeholder='Ex. pat@example.com'>
+        <mat-error
+          *ngIf="calendarForm.controls.email.hasError('email') && !calendarForm.controls.email.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="calendarForm.controls.email.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class='full-width' appearance='fill'>
+        <mat-label>Telephone number</mat-label>
+        <input type='text' matInput formControlName='telephoneNumber' placeholder='Telephone number'>
+        <mat-error *ngIf="calendarForm.controls.telephoneNumber.hasError('required')">
+          Telephone number is <strong>required</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="calendarForm.controls.telephoneNumber.hasError('maxlength') && !calendarForm.controls.telephoneNumber.hasError('pattern') ">
+          Telephone number is to <strong>long</strong>
+        </mat-error>
+        <mat-error
+          *ngIf="calendarForm.controls.telephoneNumber.hasError('minlength') && !calendarForm.controls.telephoneNumber.hasError('pattern') ">
+          Telephone number is to <strong>short</strong>
+        </mat-error>
+        <mat-error *ngIf="calendarForm.controls.telephoneNumber.hasError('pattern') ">
+          Numbers only <strong>accepted</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class='full-width' appearance='fill'>
+        <mat-label>Place of event</mat-label>
+        <input type='text' matInput formControlName='place' placeholder='Place of event'>
+        <mat-error *ngIf="calendarForm.controls.place.hasError('required')">
+          Place of event is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class='full-width' appearance='fill'>
+        <mat-label>Description</mat-label>
+        <input type='text' matInput formControlName='description' placeholder='Description'>
+        <mat-error *ngIf="calendarForm.controls.description.hasError('required')">
+          Description is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class='full-width' appearance='fill'>
+        <mat-label>Choose type of event</mat-label>
+        <mat-select formControlName='eventType'>
+          <mat-option *ngFor='let event of events' [value]='event'>
+            {{event}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="calendarForm.controls.eventType.hasError('required')">
+          Type of event is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class='full-width' appearance='fill'>
+        <mat-label>Choose icon of event</mat-label>
+        <mat-select formControlName='icon'>
+          <mat-select-trigger>
+            <mat-icon>{{calendarForm.controls.icon.value}}</mat-icon>
+          </mat-select-trigger>
+          <mat-option *ngFor='let icon of icons' [value]='icon'>
+            <mat-icon>{{icon}}</mat-icon>
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="calendarForm.controls.icon.hasError('required')">
+          Icon is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+    </form>
+
+  </div>
+
+  <div>
+    <button class='clean-form' mat-raised-button color='primary' (click)='cleanForm()'>Clean form</button>
+    <button class='new-event' mat-raised-button color='primary' (click)='addNewEvent()'>Add new event</button>
+  </div>
+</div>
+
+
+

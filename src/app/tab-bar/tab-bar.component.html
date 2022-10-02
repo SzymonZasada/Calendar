@@ -1,0 +1,19 @@
+<mat-toolbar color='primary'>
+
+  <button mat-button class='example-icon' (click)='goToHome()'>
+    <mat-icon matTooltip='Go to home'>home</mat-icon>
+  </button>
+
+  <span>My App</span>
+  <span class='example-spacer'></span>
+
+  <button mat-button (click)='goToCalendar()'>
+    <mat-icon matTooltip='Check calendar'>date_range</mat-icon>
+  </button>
+
+  <button mat-button (click)='addNewEvent()'>
+    <mat-icon matTooltip='Add new event to calendar'>add</mat-icon>
+  </button>
+
+</mat-toolbar>
+

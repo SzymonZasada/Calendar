@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: #4f4f4f;
+  background-color: #f6f6f6;
+}
+
+.title{
+  color: #797979;
+  font-size: xxx-large;
+}
+
+.subtitle{
+  color: #bbbbbb;
+  font-size: x-large;
+}
