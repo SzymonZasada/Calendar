@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RestService } from '../../services/rest-service/rest.service';
-import { catchError, map, Observable, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DateService } from '../../services/date-service/date.service';
 import { NavigationService } from '../../services/navigation-service/navigation.service';
@@ -36,6 +36,9 @@ export class CalendarEventComponent implements OnInit, OnDestroy {
   getEvent() {
     return this._restService.getAllEvent().pipe(
       /* sort by date */
+      tap(el=> {
+        console.log(el);
+      }),
       map(events => events.sort((a: eventDataInterface, b: eventDataInterface) =>
         (new Date(b.date)).getTime() - (new Date(a.date)).getTime()
       )),

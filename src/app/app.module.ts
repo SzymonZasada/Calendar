@@ -11,8 +11,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { CalendarEventComponent } from './calendar-event/calendar-event.component';
 import { CalendarFormComponent } from './calendar-form/calendar-form.component';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './in-memory-data.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -51,10 +49,7 @@ import { HomeComponent } from './home/home.component';
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    MatExpansionModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    )
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
