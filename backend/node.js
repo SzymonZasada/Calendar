@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-//const  Db = require('./dboperations');
-//const  Order = require('./Order');
 
 const sql = require('mssql');
 const config = {
@@ -61,22 +59,35 @@ app.post('/api/events', (req, res) => {
 
   sql.connect(config, function (err) {
     if (err) {
-      console.log('Error connect', err);
+      console.log('Error connect, send mock data', err);
+      res.send(events);
     }
 
     const request = new sql.Request();
-    const values=['99',data.title, data.date, data.description,data.icon,data.eventType,data.telephoneNumber,data.email,data.place ]
-    const sql1="INSERT INTO newCallendar (id, title, date, description, icon, eventType, telephoneNumber, email, place) VALUES  ? ";
-    request.query(
-     sql1, [values],function (err, result, fields) {
-       if(err){
-         throw err
-       }
-      });
-
+    request
+      .input('id', sql.NVarChar(50), '99')
+      .input('title', sql.NVarChar(50), req.body.title)
+      .input('date', sql.NVarChar(50), req.body.date)
+      .input('description', sql.NVarChar(50), req.body.description)
+      .input('icon', sql.NVarChar(50), req.body.icon)
+      .input('eventType', sql.NVarChar(50), req.body.eventType)
+      .input('telephoneNumber', sql.NVarChar(50), req.body.telephoneNumber)
+      .input('email', sql.NVarChar(50), req.body.email)
+      .input('place', sql.NVarChar(50), req.body.place)
+      .query(
+        'insert into newCallendar (id, title, date, description, icon, eventType, telephoneNumber, email, place) values (@id, @title, @date, @description,@icon,@eventType,@telephoneNumber,@email,@place)',
+        function (err, result) {
+          if (err) {
+            console.log(err);
+            res.sendStatus(400);
+          }
+          if (!err) {
+            res.json('Successfully added');
+          }
+          sql.close();
+        }
+      );
   });
-
-
 });
 
 app.listen(port, () => {
