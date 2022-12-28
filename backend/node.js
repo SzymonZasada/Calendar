@@ -1,41 +1,83 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+//const  Db = require('./dboperations');
+//const  Order = require('./Order');
 
+const sql = require('mssql');
+const config = {
+  server: 'DESKTOP-8UNPRQJ\\SQLEXPRESS',
+  database: 'callendar',
+  user: 'cal',
+  password: 'qazwsx1',
+  port: 1433,
+  options: {
+    trustServerCertificate: true,
+  },
+};
 port = 8000;
-//I create api route with custom data
 const users = [];
 
-app.use(function(req, res, next) {
-
-  // Website you wish to allow to connect
+app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-
-  // Request methods you wish to allow
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-  // Request headers you wish to allow
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+  );
   res.setHeader('Access-Control-Allow-Headers', '*');
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
   res.setHeader('Access-Control-Allow-Credentials', true);
-
   next();
 });
+
 app.use(express.json());
 app.use(bodyParser.json());
 
 app.get('/api/events', (req, res) => {
-  res.send(events);
+  sql.connect(config, function (err) {
+    if (err) {
+      console.log('Error connect, send mock data', err);
+      res.send(events);
+    }
+
+    const request = new sql.Request();
+    request.query('select * FROM newCallendar', function (err, recordset) {
+      if (err) {
+        console.log('Send mock data', err);
+        res.send(events);
+      }
+
+      res.send(recordset.recordset);
+      sql.close(function (value) {
+        console.log('Connection close', value);
+      });
+      console.log(recordset);
+    });
+  });
 });
 
 app.post('/api/events', (req, res) => {
-  const ev = req.body;
-  events.push(ev);
-  res.json('event addedd');
-});
+  const data = req.body;
+  events.push(data);
 
+  sql.connect(config, function (err) {
+    if (err) {
+      console.log('Error connect', err);
+    }
+
+    const request = new sql.Request();
+    const values=['99',data.title, data.date, data.description,data.icon,data.eventType,data.telephoneNumber,data.email,data.place ]
+    const sql1="INSERT INTO newCallendar (id, title, date, description, icon, eventType, telephoneNumber, email, place) VALUES  ? ";
+    request.query(
+     sql1, [values],function (err, result, fields) {
+       if(err){
+         throw err
+       }
+      });
+
+  });
+
+
+});
 
 app.listen(port, () => {
   console.log(`Server listening on the port::${port}`);
@@ -51,7 +93,7 @@ let events = [
     eventType: 'family',
     telephoneNumber: '123485663',
     email: 'momemail@gmail.com',
-    place: 'Parent house'
+    place: 'Parent house',
   },
   {
     id: 2,
@@ -62,7 +104,7 @@ let events = [
     eventType: 'family',
     telephoneNumber: '958473664',
     email: 'dademail@gmail.com',
-    place: 'Parent house'
+    place: 'Parent house',
   },
   {
     id: 3,
@@ -73,7 +115,7 @@ let events = [
     eventType: 'work',
     telephoneNumber: '958473664',
     email: 'work@work.com',
-    place: 'work'
+    place: 'work',
   },
   {
     id: 4,
@@ -84,7 +126,7 @@ let events = [
     eventType: 'family',
     telephoneNumber: '746357442',
     email: 'kindergarden@gmail.com',
-    place: 'Kindergarten'
+    place: 'Kindergarten',
   },
   {
     id: 5,
@@ -95,7 +137,7 @@ let events = [
     eventType: 'friends',
     telephoneNumber: '123485663',
     email: 'myfriend@gmail.com',
-    place: 'Giant hotel'
+    place: 'Giant hotel',
   },
   {
     id: 5,
@@ -106,6 +148,6 @@ let events = [
     eventType: 'family',
     telephoneNumber: '452345',
     email: 'cakedelivery@gmail.com',
-    place: 'Cake shop on honey street'
-  }
+    place: 'Cake shop on honey street',
+  },
 ];
