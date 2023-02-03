@@ -1,55 +1,61 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RestService } from '../../services/rest-service/rest.service';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { formatDate } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { catchError, map, Observable, takeUntil, throwError } from 'rxjs';
+import { DateFormat } from '../../models/calendar/enums/date-format';
+import { Errors } from '../../models/calendar/enums/errors';
+import { MatDialogMessage } from '../../models/calendar/enums/mat-dialog';
+import { EventDataInterface } from '../../models/calendar/interfaces-types/event-data-calendar';
 import { DateService } from '../../services/date-service/date.service';
 import { NavigationService } from '../../services/navigation-service/navigation.service';
-import { formatDate } from '@angular/common';
+import { RestService } from '../../services/rest-service/rest.service';
+import { Destroyable } from '../helpers/Destroyable';
 
 @Component({
   selector: 'app-calendar-event',
   templateUrl: './calendar-event.component.html',
   styleUrls: ['./calendar-event.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CalendarEventComponent implements OnInit, OnDestroy {
-  durationTime = 5000;
+export class CalendarEventComponent extends Destroyable implements OnInit {
+  private durationTime = 5000;
+  private currentDate = new Date();
 
-  currentDate$!: Observable<unknown>;
-  currentTime$!: Observable<unknown>;
-  currentDate = new Date();
-  events: eventDataInterface[] = [];
-  todayIndex!: number[];
+  public currentDate$: Observable<string>;
+  public currentTime$: Observable<string>;
+  public events: EventDataInterface[] = [];
+  public DateFormat = DateFormat;
 
   constructor(
     private _restService: RestService,
     private _snackBar: MatSnackBar,
     private _dateService: DateService,
-    private _navigationService: NavigationService
+    private _navigationService: NavigationService,
+    private _detect: ChangeDetectorRef
   ) {
-    this.currentDate$ = this._dateService.getDate();
-    this.currentTime$ = this._dateService.getTime();
+    super();
   }
 
   ngOnInit(): void {
+    this.currentDate$ = this._dateService.getDate();
+    this.currentTime$ = this._dateService.getTime();
     this.getEvent().subscribe();
   }
 
-  ngOnDestroy() {}
-
-  getEvent() {
+  getEvent(): Observable<void> {
     return this._restService.getAllEvent().pipe(
+      takeUntil(this.destroyed$),
       /* sort by date */
       map((events) =>
         events.sort(
-          (a: eventDataInterface, b: eventDataInterface) =>
-            new Date(b.date).getTime() - new Date(a.date).getTime()
+          (a: EventDataInterface, b: EventDataInterface) => new Date(b.date).getTime() - new Date(a.date).getTime()
         )
       ),
       /*add event time property */
-      map((el: eventDataInterface[]) => this.checkEventDay(el)),
+      map((el: EventDataInterface[]) => this.checkEventDay(el)),
       catchError((err) => {
         console.error('Get data', err);
-        this._snackBar.open('Server error', 'Ok', {
+        this._snackBar.open(MatDialogMessage.SERVER_ERROR, MatDialogMessage.OK, {
           duration: this.durationTime,
         });
         return throwError(err);
@@ -57,51 +63,32 @@ export class CalendarEventComponent implements OnInit, OnDestroy {
     );
   }
 
-  checkEventDay(event: eventDataInterface[]) {
-    const todayDate = formatDate(this.currentDate, 'yyyy-MM-dd', 'en_US');
+  checkEventDay(event: EventDataInterface[]): void {
+    const todayDate = formatDate(this.currentDate, DateFormat.STANDART, DateFormat.LOCALE);
     event.forEach((el) => {
-      const eventDate = formatDate(el.date, 'yyyy-MM-dd', 'en_US');
+      const eventDate = formatDate(el.date, DateFormat.STANDART, DateFormat.LOCALE);
 
       /*parse date string to user date*/
-      el.date = formatDate(el.date, 'yyyy-MM-dd', 'en_US');
+      el.date = formatDate(el.date, DateFormat.STANDART, DateFormat.LOCALE);
 
       if (eventDate == todayDate) {
-        return (el.event = 'today');
+        return (el.event = DateFormat.TODAY);
       }
       if (eventDate > todayDate) {
-        return (el.event = 'incoming');
+        return (el.event = DateFormat.INCOMING);
       }
       if (eventDate < todayDate) {
-        return (el.event = 'ended');
+        return (el.event = DateFormat.ENDED);
       }
 
-      return (el.event = 'error');
+      return (el.event = Errors.ERROR);
     });
+
     this.events = [...event];
+    //return events;
   }
 
-  addEvent() {
+  addEvent(): void {
     this._navigationService.navigateToRoute('newEventCalendar');
   }
 }
-
-export interface eventDataInterface {
-  id?: number;
-  title: string;
-  date: string | Date;
-  description: string;
-  icon: string;
-  eventType: eventDataType;
-  telephoneNumber: string;
-  email: string;
-  place: string;
-  event: string;
-}
-
-export type eventDataType =
-  | 'sport'
-  | 'culture'
-  | 'health'
-  | 'friends'
-  | 'work'
-  | 'family';

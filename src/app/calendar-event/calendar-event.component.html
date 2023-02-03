@@ -11,7 +11,7 @@
   <div class='date panel-size'>Today date: {{currentDate$ | async}}</div>
   <div class='date panel-size'> {{currentTime$ | async}}</div>
 
-  <ng-container *ngFor='let event of events'>
+  <ng-container *ngFor='let event of events '>
     <div class='panel-size'>
       <mat-accordion>
         <mat-expansion-panel>
@@ -21,9 +21,9 @@
             </mat-panel-title>
             <mat-panel-description>
               <span class='title-width'>{{event.title}}</span>&nbsp;
-              <span *ngIf="event.event==='today' ">Today</span>
-              <span *ngIf="event.event==='incoming' ">Incoming</span>
-              <span *ngIf="event.event==='ended' ">Ended</span>
+              <span *ngIf='event.event===DateFormat.TODAY '>{{DateFormat.TODAY}}</span>
+              <span *ngIf='event.event===DateFormat.INCOMING '>{{DateFormat.INCOMING}}</span>
+              <span *ngIf='event.event===DateFormat.ENDED '>{{DateFormat.ENDED}}</span>
             </mat-panel-description>
           </mat-expansion-panel-header>
           <div class='calendar-detail'>

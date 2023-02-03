@@ -1,9 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { eventDataInterface } from '../../app/calendar-event/calendar-event.component';
+import { EventDataInterface } from '../../models/calendar/interfaces-types/event-data-calendar';
 
 const URL_API = 'http://localhost:8000/api/';
+const EVENTS = 'events';
 
 @Injectable({
   providedIn: 'root',
@@ -11,14 +12,14 @@ const URL_API = 'http://localhost:8000/api/';
 export class RestService {
   constructor(private _httpClient: HttpClient) {}
 
-  getAllEvent(): Observable<eventDataInterface[]> {
-    return this._httpClient.get<eventDataInterface[]>(`${URL_API}events`, {
+  getAllEvent(): Observable<EventDataInterface[]> {
+    return this._httpClient.get<EventDataInterface[]>(`${URL_API}${EVENTS}`, {
       observe: 'body',
       responseType: 'json',
     });
   }
 
-  postNewEvent(data: eventDataInterface): Observable<eventDataInterface> {
-    return this._httpClient.post<eventDataInterface>(`${URL_API}events`, data);
+  postNewEvent(data: EventDataInterface): Observable<EventDataInterface> {
+    return this._httpClient.post<EventDataInterface>(`${URL_API}${EVENTS}`, data);
   }
 }

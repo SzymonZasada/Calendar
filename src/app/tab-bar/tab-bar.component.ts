@@ -4,15 +4,12 @@ import { NavigationService } from '../../services/navigation-service/navigation.
 @Component({
   selector: 'app-tab-bar',
   templateUrl: './tab-bar.component.html',
-  styleUrls: ['./tab-bar.component.css']
+  styleUrls: ['./tab-bar.component.css'],
 })
 export class TabBarComponent implements OnInit {
+  constructor(private _navigationService: NavigationService) {}
 
-  constructor(private _navigationService: NavigationService) {
-  }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   goToHome() {
     this._navigationService.navigateToRoute('home');
@@ -25,5 +22,4 @@ export class TabBarComponent implements OnInit {
   addNewEvent() {
     this._navigationService.navigateToRoute('newEventCalendar');
   }
-
 }

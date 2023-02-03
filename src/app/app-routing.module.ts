@@ -8,12 +8,11 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'calendar', component: CalendarEventComponent },
   { path: 'new-event', component: CalendarFormComponent },
-  { path: '**', component: HomeComponent }
+  { path: '**', component: HomeComponent },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  exports: [RouterModule],
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule {}

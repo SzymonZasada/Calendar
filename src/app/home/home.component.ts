@@ -1,24 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { NavigationService } from '../../services/navigation-service/navigation.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
+  constructor(private _navigationService: NavigationService) {}
 
-  constructor(private _navigationService: NavigationService) { }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
+  goToCalendar(): void {
+    this._navigationService.navigateToRoute('calendar');
   }
 
-  goToCalendar(){
-this._navigationService.navigateToRoute('calendar')
+  addNewEvent(): void {
+    this._navigationService.navigateToRoute('newEventCalendar');
   }
-
-  addNewEvent(){
-    this._navigationService.navigateToRoute('newEventCalendar')
-  }
-
 }
