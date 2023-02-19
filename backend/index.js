@@ -2,9 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const cors = require('./cors');
-const operations = require('./operations');
-
-port = 8000;
+const mockData = require('./mock-data');
+const { port } = require('./config');
 
 app.use(function (req, res, next) {
   cors.cors(res);
@@ -14,20 +13,12 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 app.get('/api/events', (req, res) => {
-  operations.getEvents().then((response) => {
-    res.send(response);
-  });
+  res.send(mockData);
 });
 
 app.post('/api/events', (req, res) => {
-  operations.postEvents(req).then((response) => {
-    if (!response) {
-      res.sendStatus(404);
-    }
-    if (response) {
-      res.json('Successfully added');
-    }
-  });
+  mockData.push(req.body);
+  res.json"Successfully added"');
 });
 
 app.listen(port, () => {

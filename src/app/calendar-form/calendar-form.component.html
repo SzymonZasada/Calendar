@@ -80,7 +80,7 @@
       <mat-form-field class='full-width' appearance='fill'>
         <mat-label>Choose type of event</mat-label>
         <mat-select formControlName='eventType'>
-          <mat-option *ngFor='let event of events | async' [value]='event'>
+          <mat-option *ngFor="let event of events" [value]="event">
             {{event}}
           </mat-option>
         </mat-select>
@@ -95,7 +95,7 @@
           <mat-select-trigger>
             <mat-icon>{{calendarForm.controls.icon.value}}</mat-icon>
           </mat-select-trigger>
-          <mat-option *ngFor='let icon of icons | async' [value]='icon'>
+          <mat-option *ngFor="let icon of icons" [value]="icon">
             <mat-icon>{{icon}}</mat-icon>
           </mat-option>
         </mat-select>
