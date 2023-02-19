@@ -18,7 +18,7 @@ app.get('/api/events', (req, res) => {
 
 app.post('/api/events', (req, res) => {
   mockData.push(req.body);
-  res.json"Successfully added"');
+  res.json('Successfully added');
 });
 
 app.listen(port, () => {
